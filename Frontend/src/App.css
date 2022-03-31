@@ -30,5 +30,28 @@
   padding: 8px;
   border: 0;
   border-radius: 5px;
-  
+}
+
+.waveButton:hover {
+  color: black;
+}
+
+.form {
+  margin: auto;
+}
+
+.input {
+  font-family: inherit;
+  font-size: inherit;
+  font-size: 0.8rem;
+}
+
+.totalCount {
+  text-align: center;
+  font-size: 3rem;
+  text-transform: capitalize;
+}
+
+.footer {
+  text-align: center;
 }

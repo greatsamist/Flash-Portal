@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
 import "hardhat/console.sol";
 
@@ -15,7 +15,7 @@ contract FlashPortal {
     mapping(address => Member) MemberSquad;
 
     constructor() {
-        console.log("Yo yo, I am a contract and I am smart");
+        console.log("Yo yo, flash me");
     }
 
     function flash(string memory _nickname) public {
@@ -24,16 +24,21 @@ contract FlashPortal {
         m.member = msg.sender;
         m.nickName = _nickname;
         m.flash++;
-        console.log(
-            "Address %s with Nickname %s has flashed!",
-            msg.sender,
-            _nickname
-        );
+        // console.log(
+        //     "Address %s with Nickname %s has flashed!",
+        //     msg.sender,
+        //     _nickname
+        // );
     }
 
-    function getTotalFlash() public view returns (Member memory mm, uint256) {
+    function getTotalFlash() public view returns (uint256) {
+        // console.log("We have %d total Flash!", totalFlash);
+        return (totalFlash);
+    }
+
+    function getFlasher() public view returns (Member memory mm) {
         mm = MemberSquad[msg.sender];
-        console.log("We have %d total Flash!", totalFlash);
-        return (mm, totalFlash);
+
+        return mm;
     }
 }
