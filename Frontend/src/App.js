@@ -39,7 +39,7 @@ export default function App() {
         // console.log("Found an authorized account:", account);
         setCurrentAccount(account);
       } else {
-        alert("No authorized account found");
+        alert("Sign in with your wallet");
       }
     } catch (error) {
       console.log(error);
@@ -110,6 +110,9 @@ export default function App() {
   const flash = async (e) => {
     try {
       e.preventDefault();
+      if (!currentAccount) {
+        checkIfWalletIsConnected();
+      }
 
       getUser();
 
@@ -157,14 +160,14 @@ export default function App() {
           <button
             className="waveButton"
             type="submit"
-            disabled={!currentAccount}
+            // disabled={!currentAccount}
           >
             Flash Me
           </button>
         </form>
 
         <div className="totalCount">
-          <h5>Total flash: +{totalCount}</h5>
+          <h5>{totalCount ? `TotalCount: +${totalCount}` : ""}</h5>
         </div>
 
         {/*
@@ -177,7 +180,9 @@ export default function App() {
         )}
         <div className="footer">
           <p>
-            <em>Your must be on the rinkeby network</em>
+            <em>
+              You must be on the rinkeby network to interact with this page
+            </em>
           </p>
           <p>Copyright @ Samuel Ojo</p>
         </div>
