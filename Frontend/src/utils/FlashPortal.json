@@ -10,6 +10,11 @@
         "internalType": "string",
         "name": "_nickname",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_message",
+        "type": "string"
       }
     ],
     "name": "flash",
@@ -34,14 +39,19 @@
             "type": "string"
           },
           {
+            "internalType": "string",
+            "name": "message",
+            "type": "string"
+          },
+          {
             "internalType": "uint256",
-            "name": "flash",
+            "name": "timestamp",
             "type": "uint256"
           }
         ],
-        "internalType": "struct FlashPortal.Member",
-        "name": "mm",
-        "type": "tuple"
+        "internalType": "struct FlashPortal.Member[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",

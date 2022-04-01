@@ -5,7 +5,7 @@ import "./App.css";
 import abi from "./utils/FlashPortal.json";
 
 export default function App() {
-  const contractAddress = "0x18335a592718dc64F6fd360EA3Be46e4A51D6F33";
+  const contractAddress = "0xdD9724e4B570e25304e4Eb79B5B3C0E28fc97b62"; // Old one"0x18335a592718dc64F6fd360EA3Be46e4A51D6F33";
 
   const contractABI = abi;
   /*
@@ -14,6 +14,8 @@ export default function App() {
   const [currentAccount, setCurrentAccount] = useState("");
   const [nickNameInput, setNickNameInput] = useState("");
   const [totalCount, setTotalCount] = useState("");
+  const [allFlash, setAllFlash] = useState([]);
+  const [messageInput, setMessageInput] = useState("");
 
   const checkIfWalletIsConnected = async () => {
     /*
@@ -101,10 +103,53 @@ export default function App() {
   useEffect(() => {
     checkIfWalletIsConnected();
     TotalCount();
+    getFlasher();
   });
 
   const onChangeInput = ({ target }) => {
-    setNickNameInput(target.value);
+    switch (target.id) {
+      case "nickname":
+        setNickNameInput(target.value);
+        break;
+
+      case "message":
+        setMessageInput(target.value);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const getFlasher = async () => {
+    try {
+      getUser();
+
+      /*
+       * Call the getAllWaves method from your Smart Contract
+       */
+      const waves = await wavePortalContract.getFlasher();
+      // console.log(waves);
+      /*
+       * We only need address, timestamp, and message in our UI so let's
+       * pick those out
+       */
+      let wavesCleaned = [];
+      waves.forEach((wave) => {
+        wavesCleaned.push({
+          address: wave.member,
+          timestamp: new Date(wave.timestamp * 1000),
+          nickname: wave.nickName,
+          message: wave.message,
+        });
+      });
+      /*
+       * Store our data in React State
+       */
+      setAllFlash(wavesCleaned);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const flash = async (e) => {
@@ -122,7 +167,10 @@ export default function App() {
       /*
        * Execute the actual wave from your smart contract
        */
-      const waveTxn = await wavePortalContract.flash(nickNameInput);
+      const waveTxn = await wavePortalContract.flash(
+        nickNameInput,
+        messageInput
+      );
       console.log("Mining...", waveTxn.hash);
 
       await waveTxn.wait();
@@ -141,7 +189,7 @@ export default function App() {
     <div className="mainContainer">
       <div className="dataContainer">
         {/* @ ignore */}
-        <div className="header">👋 Hey there!</div>
+        <div className="header">⚡ Hey there!</div>
 
         <div className="bio">
           I am Samuel and I worked on smart contracts so that's pretty cool
@@ -150,13 +198,24 @@ export default function App() {
         <form onSubmit={flash} className="form">
           <input
             type="text"
-            placeholder="Enter Nickname"
+            placeholder="enter nickname"
             required
             className="input"
             value={nickNameInput}
             onChange={onChangeInput}
             id="nickname"
           />
+
+          <input
+            type="text"
+            placeholder="enter message"
+            required
+            className="input"
+            value={messageInput}
+            onChange={onChangeInput}
+            id="message"
+          />
+
           <button
             className="waveButton"
             type="submit"
@@ -167,7 +226,7 @@ export default function App() {
         </form>
 
         <div className="totalCount">
-          <h5>{totalCount ? `TotalCount: +${totalCount}` : ""}</h5>
+          <h5>{totalCount ? `Total Flash: +${totalCount}` : ""}</h5>
         </div>
 
         {/*
@@ -178,6 +237,26 @@ export default function App() {
             Connect Wallet
           </button>
         )}
+
+        {allFlash.map((wave, index) => {
+          return (
+            <div
+              key={index}
+              style={{
+                backgroundColor: "OldLace",
+                marginTop: "16px",
+                textAlign: "center",
+                padding: "8px",
+              }}
+            >
+              <div>Address: {wave.address}</div>
+              <div>Time: {wave.timestamp.toString()}</div>
+              <div>Nickname: {wave.nickname}</div>
+              <div>Message: {wave.message}</div>
+            </div>
+          );
+        })}
+
         <div className="footer">
           <p>
             <em>

@@ -8,27 +8,21 @@ contract FlashPortal {
     struct Member {
         address member;
         string nickName;
-        uint256 flash;
+        string message;
+        uint256 timestamp;
     }
 
+    Member[] _member;
+
     uint256 totalFlash;
-    mapping(address => Member) MemberSquad;
 
     constructor() {
         console.log("Yo yo, flash me");
     }
 
-    function flash(string memory _nickname) public {
+    function flash(string memory _nickname, string memory _message) public {
         totalFlash++;
-        Member storage m = MemberSquad[msg.sender];
-        m.member = msg.sender;
-        m.nickName = _nickname;
-        m.flash++;
-        // console.log(
-        //     "Address %s with Nickname %s has flashed!",
-        //     msg.sender,
-        //     _nickname
-        // );
+        _member.push(Member(msg.sender, _nickname, _message, block.timestamp));
     }
 
     function getTotalFlash() public view returns (uint256) {
@@ -36,9 +30,7 @@ contract FlashPortal {
         return (totalFlash);
     }
 
-    function getFlasher() public view returns (Member memory mm) {
-        mm = MemberSquad[msg.sender];
-
-        return mm;
+    function getFlasher() public view returns (Member[] memory) {
+        return _member;
     }
 }

@@ -33,11 +33,14 @@
 }
 
 .waveButton:hover {
-  color: black;
+  color: #fff;
+  background-color: black;
 }
 
 .form {
-  margin: auto;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 2rem;
 }
 
 .input {
@@ -48,11 +51,11 @@
 
 .totalCount {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2rem;
   text-transform: capitalize;
 }
 
 .footer {
   text-align: center;
-  margin-top: 8rem;
+  margin-top: 6rem;
 }
